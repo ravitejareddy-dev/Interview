@@ -29,7 +29,7 @@ export default function ProductDetailsScreen() {
   const [expanded, setExpanded] = useState(false)
   const [quantity, setQuantity] = useState(productData.minimumOrderQuantity)
 
-  // ✅ ADD TO CART
+
   const handleAddToCart = async () => {
     try {
       if (quantity < productData.minimumOrderQuantity) {
