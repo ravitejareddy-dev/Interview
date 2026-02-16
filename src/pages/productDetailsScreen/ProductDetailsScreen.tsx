@@ -25,20 +25,12 @@ export default function ProductDetailsScreen() {
   const route = useRoute()
   const navigation = useNavigation()
   const { productData } = route?.params as any
-
   const [expanded, setExpanded] = useState(false)
-  const [quantity, setQuantity] = useState(productData.minimumOrderQuantity)
 
 
   const handleAddToCart = async () => {
     try {
-      if (quantity < productData.minimumOrderQuantity) {
-        Alert.alert(
-          'Minimum Order Required',
-          `You must order at least ${productData.minimumOrderQuantity} items.`
-        )
-        return
-      }
+      const quantity = productData?.minimumOrderQuantity
 
       const existingCart = await AsyncStorage.getItem(CART_KEY)
       const cartItems = existingCart ? JSON.parse(existingCart) : []
@@ -74,7 +66,7 @@ export default function ProductDetailsScreen() {
       )
 
       if (existingIndex !== -1) {
-          navigation.navigate("FavouritesScreen")
+        navigation.navigate("FavouritesScreen")
 
         return
       }
@@ -97,8 +89,8 @@ export default function ProductDetailsScreen() {
       style={globalStyles.container}
       edges={['top', 'bottom', 'left', 'right']}
     >
-       <HeaderComponent
-      title={"Product details"}
+      <HeaderComponent
+        title={"Product details"}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
 
@@ -151,7 +143,7 @@ export default function ProductDetailsScreen() {
             Warranty: {productData.warrantyInformation}
           </Text>
 
-          <Text style={styles. returnPolicy}>
+          <Text style={styles.returnPolicy}>
             Return Policy: {productData.returnPolicy}
           </Text>
 
