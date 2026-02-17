@@ -164,82 +164,87 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} >
-        {!searchText.trim() && groceriesData.length > 0 && (
-          <View style={styles.courselConatiner} >
-            <FlatList
-              ref={carouselRef}
-              data={groceriesData}
-              horizontal
-              pagingEnabled
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({ item }) => (
-                <Image
-                  source={{ uri: item.images[0] }}
-                  style={{
-                    width: width,
-                    height: 200,
-                  }}
-                  resizeMode="cover"
-                />
-              )}
-              onMomentumScrollEnd={event => {
-                const index = Math.round(
-                  event.nativeEvent.contentOffset.x / width
-                )
-                setActiveIndex(index)
-              }}
-            />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginTop: 8,
-              }}
-            >
-              {groceriesData.map((_, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.dottedValues
-                    , {
-                      backgroundColor:
-                        activeIndex === index ? 'black' : '#ccc',
-                    }
-                  ]}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-        {searchText.trim() ? (
+      {!searchText.trim() && groceriesData.length > 0 && (
+        <View style={styles.courselConatiner} >
           <FlatList
-            data={filteredProducts}
-            renderItem={renderItem}
+            ref={carouselRef}
+            data={groceriesData}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
             keyExtractor={item => item.id.toString()}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
+            getItemLayout={(data, index) => ({
+              length: width,
+              offset: width * index,
+              index,
+            })}
+            renderItem={({ item }) => (
+              <Image
+                source={{ uri: item.images[0] }}
+                style={{
+                  width: width,
+                  height: 200,
+                }}
+                resizeMode="cover"
+              />
+            )}
+            onMomentumScrollEnd={event => {
+              const index = Math.round(
+                event.nativeEvent.contentOffset.x / width
+              )
+              setActiveIndex(index)
+            }}
           />
-        ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {Object.keys(categorizedProducts).map(category => (
-              <View key={category} style={styles.itemContainer}>
-                <Text style={styles.catogeryTxt}>
-                  {category.toUpperCase()}
-                </Text>
 
-                <FlatList
-                  data={categorizedProducts[category]}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.id.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                />
-              </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginTop: 8,
+            }}
+          >
+            {groceriesData.map((_, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.dottedValues
+                  , {
+                    backgroundColor:
+                      activeIndex === index ? 'black' : '#ccc',
+                  }
+                ]}
+              />
             ))}
-          </ScrollView>
-        )}
+          </View>
+        </View>
+      )}
+      {searchText.trim() ? (
+        <FlatList
+          data={filteredProducts}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {Object.keys(categorizedProducts).map(category => (
+            <View key={category} style={styles.itemContainer}>
+              <Text style={styles.catogeryTxt}>
+                {category.toUpperCase()}
+              </Text>
+
+              <FlatList
+                data={categorizedProducts[category]}
+                renderItem={renderItem}
+                keyExtractor={item => item.id.toString()}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
+          ))}
+        </ScrollView>
+      )}
       </ScrollView>
     </SafeAreaView>
   )
